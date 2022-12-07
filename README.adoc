@@ -1,0 +1,153 @@
+// MetaData
+:repo-name: CONFIGURABLE-DYNAMIC-CDK-RESOURCE-PROVISIONING-TYPESCRIPT
+:application-name: CONFIGURABLE-DYNAMIC-CDK-RESOURCE-PROVISIONING-TYPESCRIPT
+
+
+
+
+= How to configure a CDK App and dynamically provision resource quantities in TypeScript
+
+
+
+
+== Overview
+This repository contains source code to configure a CDK app via environment variables. The repo will show how you can, through environment variables, configure the CDK app to provision resources dynamically while keeping the state for the app without having to add extra code when increasing a resource count. 
+
+
+
+== Considerations
+
+. How can you configure the CDK app to use environment variables to set the CDK app name?
+. How can you configure the CDK app to use environment variables to set the region and account?
+. How can you configure the CDK app to use environment variables to set the resource names and quantity using a list?
+. How can you configure the CDK app to use environment variables to set the resource name & quantity with env?
+. How can you configure the CDK app to use environment variables to keep state and/while allowing for dynamic configuration?
+
+== Solution
+
+The solution uses environment variables, `export <ENVVAR>=<some value>`, to configure the app during a CDK `deploy`, or `destroy`. If the environment variables are not set, defaults are used. The code in `{repo-name}` directory and  `app.py` in the root directory use the environment variables to configure the CDK app.
+
+The sample code deploys the following:
+
+. S3 bucket(s)
+. SQS queue(s)
+
+
+Depending on the values set in the environment variables, the CDK app will deploy the resources dynamically.
+[CAUTION]
+====
+Charges do apply. Do not set the Counts to a high number. The CDK app will deploy the resources dynamically.
+====
+
+
+---
+. How can I configure the CDK app to use environment variables to set the CDK app name?
+.. Make sure you set the default in the `.ts` files 
+.. Get the environment variable value, see source code for how to get the environment variable value
+.. Create an environment variable, source code uses `applicationName`
+[source, bash]
+export applicationName=<SET-APP-NAME>
+
+
+
+. How can I configure the CDK app to use environment variables to set the region and account?
+.. Make sure you set the defaults  in the `.ts` files
+.. Get the environment variable value, see source code for how to get the environment variable value 
+.. If you don't set the region and account, the CDK defaults are used
+.. Create the environment variables, source code uses `DEPLOY_REGION` and `DEPLOY_ACCOUNT`
+[source, bash]
+export DEPLOY_REGION<SET-REGION>
+export DEPLOY_ACCOUNT=<SET-ACCOUNT>
+
+. How can I configure the CDK app to use environment variables to set the resource names based on a list?
+..  For this code, we use the following list:
+... S3 bucket name(s), a string of bucket names separated by a comma
+
+.. Make sure you set the defaults  in the `{repo-name}.py` file in the {repo-name} directory
+.. `BUCKET_NAMES` is a string of bucket names separated by a comma. The code will split the string and create a list of bucket names.
+.. If you set the string to `bucket1,bucket2,bucket3`, the code will create 3 buckets with the names `bucket1`, `bucket2`, and `bucket3`
+.. If you remove a bucket name from the string and deploy, the bucket name that was removed from the string will be deleted
+.. If you add a bucket name to the string and deploy, the bucket name that was added to the string will be created
+.. Get the environment variable values for each resource name, see source code for how to get the environment variable value
+.. Create the environment variables, source code uses `BUCKET_NAMES`
+[source, bash]
+export BUCKET_NAMES=<SET-BUCKET-NAME> 
+
+. How can I configure the CDK app to use environment variables to set the base name and resource quantity?
+..  For this code, we use the following base name and resource quantity:
+... SQS queue name, a string of queue names separated by a comma
+.. Create an environment variable count for resources you want to deploy based on a base name + some resource countID
+.. In this solution if you set the QUEUE_NAME to `queue` and the QUEUE_COUNT to `3`, the code will create 3 queues with the names `queue1`, `queue2`, and `queue3`
+[source, bash]
+export NUMBER_OF_QUEUES=<SET-QUEUE-COUNT>
+export QUEUE_NAME=<SET-QUEUE-NAME> 
+
+. How can I configure the CDK app to use environment variables to keep state allowing for dynamic configuration?
+
+You need to make sure your resources are unique every time a new stack is deployed. In the code, a combination of the app name, region, and hashed account number are used to create a unique name for each resource. This allows you to deploy the same stack multiple times and not have resource name conflicts and keeping the state.
+
+[WARNING]
+====
+. NEVER USE YOUR REAL ACCOUNT NUMBER WHEN CREATING RESOURCES. ALWAYS USE A HASHED ACCOUNT NUMBER. USE A PROPER HASHING ALGORITHM TO CREATE A UNIQUE HASHED ACCOUNT NUMBER.
+. REPLACE THE `hash` FUNCTION WITH A PROPER HASHING ALGORITHM.
+====
+
+
+
+
+
+
+
+== Prerequisites
+. Install Nodejs
+
+. Install TypeScript
+
+. Install CDK Toolkit globally pass:[<strong><u>(If you don't have it installed already)</u></strong>]
+[source,bash]
+npm install -g aws-cdk
+
+. Bootstrap account/region pass:[<strong><u>(If you have not bootstrapped it already)</u></strong>]
+[source,bash]
+cdk bootstrap aws://<ACCOUNT>/<REGION> OR --profile <PROFILE>
+
+== Clone the repo
+[source,bash]
+git clone https://github.com/aws-samples/configurable-dynamic-cdk-resource-provisioning-typescript.git
+
+
+=== Installing dependencies
+[source,bash]
+npm install
+
+
+=== At this point you can now synthesize the CloudFormation template for this code.
+[source,bash]
+$ cdk synth --profile <PROFILE>
+
+=== Deploy the app
+[source,bash]
+$ cdk deploy --profile <PROFILE> --require-approval never
+
+== Useful commands
+
+
+* `npm run build`   compile typescript to js
+* `npm run watch`   watch for changes and compile
+* `npm run test`    perform the jest unit tests
+* `cdk deploy`      deploy this stack to your default AWS account/region
+* `cdk diff`        compare deployed stack with current state
+* `cdk synth`       emits the synthesized CloudFormation template
+
+
+
+== Security
+See link:./CONTRIBUTING.md#security-issue-notifications[Security Issue Notifications] for more information.
+
+== Contributing
+Please refer to our link:./CONTRIBUTING.md[Contributing] Guideline before reporting bugs or feature requests.
+
+
+== License
+
+See the link:./LICENSE[LICENSE] file for our project's licensing.
