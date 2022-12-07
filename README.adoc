@@ -25,7 +25,7 @@ This repository contains source code to configure a CDK app via environment vari
 
 == Solution
 
-The solution uses environment variables, `export <ENVVAR>=<some value>`, to configure the app during a CDK `deploy`, or `destroy`. If the environment variables are not set, defaults are used. The code in `{repo-name}` directory and  `app.py` in the root directory use the environment variables to configure the CDK app.
+The solution uses environment variables, `export <ENVVAR>=<some value>`, to configure the app during a CDK `deploy`, or `destroy`. If the environment variables are not set, defaults are used. The code in the `.ts` files will use the environment variables to set the CDK app name, region, account, and resource names and quantities. The code will also use the environment variables to keep state and allow for dynamic configuration.
 
 The sample code deploys the following:
 
