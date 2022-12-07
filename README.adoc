@@ -63,7 +63,7 @@ export DEPLOY_ACCOUNT=<SET-ACCOUNT>
 ..  For this code, we use the following list:
 ... S3 bucket name(s), a string of bucket names separated by a comma
 
-.. Make sure you set the defaults  in the `{repo-name}.py` file in the {repo-name} directory
+.. Make sure you set the defaults  in the `{repo-name}.ts` file in the {repo-name} directory
 .. `BUCKET_NAMES` is a string of bucket names separated by a comma. The code will split the string and create a list of bucket names.
 .. If you set the string to `bucket1,bucket2,bucket3`, the code will create 3 buckets with the names `bucket1`, `bucket2`, and `bucket3`
 .. If you remove a bucket name from the string and deploy, the bucket name that was removed from the string will be deleted
