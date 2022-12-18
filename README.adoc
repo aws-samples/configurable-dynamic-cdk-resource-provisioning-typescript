@@ -59,11 +59,14 @@ export applicationName=<SET-APP-NAME>
 export DEPLOY_REGION<SET-REGION>
 export DEPLOY_ACCOUNT=<SET-ACCOUNT>
 
+
 . How can I configure the CDK app to use environment variables to set the resource names based on a list?
 ..  For this code, we use the following list:
 ... S3 bucket name(s), a string of bucket names separated by a comma
 
 .. Make sure you set the defaults  in the `{repo-name}.ts` file in the {repo-name} directory
+[NOTE]
+*  ***There is an intentional error introduced on `Line 39` of the `configurable-dynamic-cdk-resource-provisioning-typescript.ts` file in the `configurable-dynamic-cdk-resource-provisioning-typescript` directory for the default bucket names to `"['testcdkbucket']"`. You must set this value to '<SOMEUNIQUEBUCKETNAME>' to deploy the CDK app.
 .. `BUCKET_NAMES` is a string of bucket names separated by a comma. The code will split the string and create a list of bucket names.
 .. If you set the string to `bucket1,bucket2,bucket3`, the code will create 3 buckets with the names `bucket1`, `bucket2`, and `bucket3`
 .. If you remove a bucket name from the string and deploy, the bucket name that was removed from the string will be deleted
@@ -72,6 +75,7 @@ export DEPLOY_ACCOUNT=<SET-ACCOUNT>
 .. Create the environment variables, source code uses `BUCKET_NAMES`
 [source, bash]
 export BUCKET_NAMES=<SET-BUCKET-NAME> 
+
 
 . How can I configure the CDK app to use environment variables to set the base name and resource quantity?
 ..  For this code, we use the following base name and resource quantity:
